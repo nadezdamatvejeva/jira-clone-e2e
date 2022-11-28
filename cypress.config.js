@@ -5,7 +5,11 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
+
     baseUrl: 'https://jira.ivorreic.com/',
+    env: {
+      baseUrl: 'https://jira.ivorreic.com/',
+    },
     defaultCommandTimeout: 30000,
     projectId: "dpb32o",
   },
