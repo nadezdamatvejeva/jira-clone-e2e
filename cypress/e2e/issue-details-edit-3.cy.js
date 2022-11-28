@@ -33,19 +33,20 @@
 
 describe('Issue details editing', () => {
   beforeEach(() => {
-    cy.visit('/');
-    cy.url().should('eq', 'http://34.247.67.214:8080/project').then((url) => {
-      cy.visit(url + '/board');
-      cy.contains('This is an issue of type: Task.').click();
-    });
+    cy.visit('https://jira.ivorreic.com/project/board');
+    //cy.url().should('eq', 'http://34.247.67.214:8080/project').then((url) => {
+    //  cy.visit(url + '/board');
+    cy.contains('This is an issue of type: Task.').click();
   });
+  //});
+
 
   it('Should update type, status, assignees, reporter, priority successfully', () => {
     getIssueDetailsModal().within(() => {
       cy.get('[data-testid="select:type"]').click('bottomRight');
       cy.get('[data-testid="select-option:Story"]')
-          .trigger('mouseover')
-          .trigger('click');
+        .trigger('mouseover')
+        .trigger('click');
       cy.get('[data-testid="select:type"]').should('contain', 'Story');
 
       cy.get('[data-testid="select:status"]').click('bottomRight');
@@ -67,47 +68,128 @@ describe('Issue details editing', () => {
       cy.get('[data-testid="select-option:Medium"]').click();
       cy.get('[data-testid="select:priority"]').should('have.text', 'Medium');
     });
+
+    const dataForVerificationWithContains = [
+      ['[data-testid="select:type"]', 'Story'],
+      ['[data-testid="select:assignees"]', 'Baby Yoda'],
+      ['[data-testid="select:assignees"]', 'Lord Gaben']
+    ]
+
+    const dataForVerificationByText = [
+      ['[data-testid="select:status"]', 'Done'],
+      ['[data-testid="select:reporter"]', 'Pickle Rick'],
+      ['[data-testid="select:priority"]', 'Medium']
+    ]
+
+    //task #1, workshop #16
+    for (const [property, value] of dataForVerificationWithContains) {
+      cy.get(property).should('contain', value);
+    }
+
+    for (const [property, value] of dataForVerificationByText) {
+      cy.get(property).should('have.text', value);
+    }
+
+    const dataForVerificationTask2 = [
+      ['[data-testid="select:type"]', 'Story'],
+      ['[data-testid="select:assignees"]', 'Baby Yoda'],
+      ['[data-testid="select:assignees"]', 'Lord Gaben'],
+      ['[data-testid="select:status"]', 'Done'],
+      ['[data-testid="select:reporter"]', 'Pickle Rick'],
+      ['[data-testid="select:priority"]', 'Medium']
+    ]
+
+    //task #2, workshop #16
+    for (const [property, value] of dataForVerificationTask2) {
+      if (property === '[data-testid="select:type"]' || property === '[data-testid="select:assignees"]')
+        cy.get(property).should('contain', value);
+      else cy.get(property).should('have.text', value);
+    }
   });
 
-  it('Should update title, description successfully', () => {
-    const title = 'TEST_TITLE';
-    const description = 'TEST_DESCRIPTION';
-
+  // task #3, workshop #17
+  it('Reporter test with regEx', () => {
     getIssueDetailsModal().within(() => {
-      cy.get('textarea[placeholder="Short summary"]')
-        .clear()
-        .type(title)
-        .blur();
-
-      cy.get('.ql-snow')
-        .click()
-        .should('not.exist');
-
-      cy.get('.ql-editor').clear().type(description);
-
-      cy.contains('button', 'Save')
-        .click()
-        .should('not.exist');
-
-      cy.get('textarea[placeholder="Short summary"]').should('have.text', title);
-      cy.get('.ql-snow').should('have.text', description);
+      cy.get('[data-testid="select:reporter"]').invoke('text').should('match', /^[A-Za-z ]*$/);
     });
   });
 
-  it('Should delete an issue successfully', () => {
-    getIssueDetailsModal()
-      .find(`button ${'[data-testid="icon:trash"]'}`)
-      .click();
+  //task #4, workshop #17
+  it('Check, that priority fields has ${numberOfPriorities} values', () => {
+    let priorities = [];
+    const numberOfPriorities = 5;
 
-    cy.get('[data-testid="modal:confirm"]')
-      .contains('button', 'Delete issue')
-      .click();
-    cy.get('[data-testid="modal:confirm"]')
-        .should('not.exist');
+    //add already chosen priority to the list
+    cy.get('[data-testid="select:priority"]').invoke('text').then((extractedPriority) => {
+      priorities.push(extractedPriority);
+    })
 
-    cy.contains('This is an issue of type: Task.').should('not.exist');
+    //click to open options
+    cy.get('[data-testid="select:priority"]').click();
 
+    let totalLength = 0;
+
+    //get number of options from the page
+    cy.get('[data-select-option-value]').then(options => {
+      const itemCount = options.length;
+
+      //iterate through the options and
+      //add text from each option to the list
+      for (let index = 0; index < itemCount; index++) {
+        cy.get('[data-select-option-value]')
+          .eq(index).invoke('text').then((extractedPriority) => {
+            priorities.push(extractedPriority);
+            cy.log("We added priority: " + extractedPriority);
+            cy.log("Current lenght of array is: " + priorities.length);
+
+            if (index == (itemCount - 1)) {
+              cy.log("TOTAL calculated array length: " + priorities.length);
+              expect(priorities.length).to.be.eq(numberOfPriorities);
+            }
+          });
+      };
+    });
   });
 
-  const getIssueDetailsModal = () => cy.get('[data-testid="modal:issue-details"]');
-});
+    it('Should update title, description successfully', () => {
+      const title = 'TEST_TITLE';
+      const description = 'TEST_DESCRIPTION';
+
+      getIssueDetailsModal().within(() => {
+        cy.get('textarea[placeholder="Short summary"]')
+          .clear()
+          .type(title)
+          .blur();
+
+        cy.get('.ql-snow')
+          .click()
+          .should('not.exist');
+
+        cy.get('.ql-editor').clear().type(description);
+
+        cy.contains('button', 'Save')
+          .click()
+          .should('not.exist');
+
+        cy.get('textarea[placeholder="Short summary"]').should('have.text', title);
+        cy.get('.ql-snow').should('have.text', description);
+      });
+    });
+
+    it('Should delete an issue successfully', () => {
+      getIssueDetailsModal()
+        .find(`button ${'[data-testid="icon:trash"]'}`)
+        .click();
+
+      cy.get('[data-testid="modal:confirm"]')
+        .contains('button', 'Delete issue')
+        .click();
+      cy.get('[data-testid="modal:confirm"]')
+        .should('not.exist');
+
+      cy.contains('This is an issue of type: Task.').should('not.exist');
+
+    });
+
+    const getIssueDetailsModal = () => cy.get('[data-testid="modal:issue-details"]');
+  });

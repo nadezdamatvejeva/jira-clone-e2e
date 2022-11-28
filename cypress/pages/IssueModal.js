@@ -1,3 +1,4 @@
+
 class IssueModal {
     constructor() {
         this.submitButton = 'button[type="submit"]';
@@ -8,10 +9,16 @@ class IssueModal {
         this.assignee = '[data-testid="select:userIds"]';
         this.backlogList = '[data-testid="board-list:backlog"]';
         this.issuesList = '[data-testid="list-issue"]';
+        this.newIssueButton = '[data-testid="icon:plus"]';
     }
 
     getIssueModal() {
         return cy.get(this.issueModal);
+    }
+
+    getNewIssueModal() {
+        cy.get(this.newIssueButton).click();
+        cy.get(this.issueModal).should('be.visible');
     }
 
     selectIssueType(issueType) {
@@ -28,6 +35,7 @@ class IssueModal {
 
     editTitle(title) {
         cy.get(this.title).type(title);
+        //this.ensureValueIsEdited(this.title, title);
     }
 
     editDescription(description) {
@@ -40,9 +48,18 @@ class IssueModal {
             this.editTitle(issueDetails.title);
             this.editDescription(issueDetails.description);
             this.selectAssignee(issueDetails.assignee);
-
             cy.get(this.submitButton).click();
         });
+    }
+
+    createIssueUsingCreateButton(issueDetails) {
+        this.getNewIssueModal();
+        this.selectIssueType(issueDetails.type);
+        this.editTitle(issueDetails.title);
+        this.editDescription(issueDetails.description);
+        this.selectAssignee(issueDetails.assignee);
+        cy.get(this.submitButton).click();
+
     }
 
     ensureIssueIsCreated(expectedAmountIssues, issueDetails) {
@@ -58,6 +75,17 @@ class IssueModal {
             cy.get(`[data-testid="avatar:${issueDetails.assignee}"]`).should('be.visible');
         });
     }
+
+    ensureIssueTitleIsCorrect(issueTitle) {
+        cy.get(this.backlogList).should('be.visible').within(() => {
+            cy.get(this.issuesList)
+                .first()
+                .find('p').invoke('text')
+                .should('contain', issueTitle);
+        });
+    }
+
+
 }
 
 export default new IssueModal();

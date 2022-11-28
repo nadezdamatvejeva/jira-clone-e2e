@@ -1,0 +1,40 @@
+{
+  "components": {
+    "examples": {},
+    "headers": {},
+    "parameters": {},
+    "requestBodies": {},
+    "responses": {},
+    "schemas": {},
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "info": {
+    "title": "jira_api",
+    "version": "1.0.0",
+    "license": {
+      "name": "MIT"
+    },
+    "contact": {
+      "name": "Cerebrum Hub"
+    }
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ]
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ]
+}

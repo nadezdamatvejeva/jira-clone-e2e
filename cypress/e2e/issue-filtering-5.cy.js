@@ -11,10 +11,44 @@
 
 describe('Issue filtering', () => {
   beforeEach(() => {
-    cy.visit('/');
+    cy.visit('https://jira.ivorreic.com/project/board');
   });
 
-  it('Should filter issues by title', () => {
+
+  const issuesToValidate = [
+    {
+      issueName: 'multiple assignees',
+      expectedAmountOfIssues: '1',
+    },
+    {
+      issueName: 'you can',
+      expectedAmountOfIssues: '2',
+    },
+    {
+      issueName: 'an issue',
+      expectedAmountOfIssues: '3',
+    }
+  ];
+
+  //Task #1, workshop#17
+  for (let issue of issuesToValidate) {
+    it(`Should filter issues by title: ${issue.issueName}`, () => {
+      getSearchInput().debounced('type', issue.issueName);
+      cy.get('[data-testid="list-issue"]').should('have.length', issue.expectedAmountOfIssues);
+    });
+  };
+
+  //Task #2, workshop#17
+  it(`Should filter issues by title: `, () => {
+    issuesToValidate.forEach(issue => {
+      getSearchInput().clear().debounced('type', issue.issueName);
+      cy.get('[data-testid="list-issue"]').should('have.length', issue.expectedAmountOfIssues);
+    });
+  });
+
+
+  //*old code:
+  it.only('Should filter issues by title', () => {
     getSearchInput().debounced('type', 'multiple assignee');
     cy.get('[data-testid="list-issue"]').should('have.length', '1');
   });

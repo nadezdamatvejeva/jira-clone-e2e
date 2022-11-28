@@ -1,0 +1,122 @@
+openapi: "3.0.3"
+info:
+  title: "jira_clone API"
+  description: "jira_clone API"
+  version: "1.0.0"
+servers:
+  - url: "http://localhost:3000"
+  
+paths:
+  /authentication/guest:
+    post:
+      summary: "POST authentication/guest"
+      responses:
+        "200":
+          description: "OK"
+  /comments:
+    post:
+      summary: "POST comments"
+      responses:
+        "200":
+          description: "OK"
+  /comments/{commentId}:
+    put:
+      summary: "PUT comments/{commentId}"
+      parameters:
+        - name: "commentId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: "OK"
+    delete:
+      summary: "DELETE comments/{commentId}"
+      parameters:
+        - name: "commentId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: "OK"
+  /currentUser:
+    get:
+      summary: "GET currentUser"
+      responses:
+        "200":
+          description: "OK"
+  /issues:
+    get:
+      summary: "GET issues"
+      responses:
+        "200":
+          description: "OK"
+
+  /issues/{issueId}:
+    get:
+      summary: "GET issues/{issueId}"
+      parameters:
+        - name: "issueId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: "OK"
+    put:
+      summary: "PUT issues/{issueId}"
+      parameters:
+        - name: "issueId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: "OK"
+    delete:
+      summary: "DELETE issues/{issueId}"
+      parameters:
+        - name: "issueId"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: "OK"
+  /project:
+    put:
+      summary: "PUT project"
+      responses:
+        "200":
+          description: "OK"
+  /test/create-account:
+    post:
+      summary: "POST test/create-account"
+      responses:
+        "200":
+          description: "OK"
+  /test/reset-database:
+    delete:
+      summary: "DELETE test/reset-database"
+      responses:
+        "200":
+          description: "OK"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
