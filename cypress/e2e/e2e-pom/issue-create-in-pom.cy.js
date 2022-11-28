@@ -9,9 +9,7 @@ import { faker } from '@faker-js/faker'
 describe('Issue create', () => {
   beforeEach(() => {
     cy.visit('/');
-    cy.intercept('GET','**/currentUser').as('currentUserApiRequest')
     cy.url().then((url) => {
-    cy.wait('@currentUserApiRequest')
     cy.visit(url + '/settings?modal-issue-create=true');
   });
   });
@@ -27,7 +25,7 @@ describe('Issue create', () => {
 
   it('Should create issue successfully', () => {
     IssueModal.createIssueUsingCreateButton(issueDetails);
-    //IssueModal.ensureIssueIsCreated(EXPECTED_AMOUNT_OF_ISSUES, issueDetails);
+    IssueModal.ensureIssueIsCreated(EXPECTED_AMOUNT_OF_ISSUES, issueDetails);
   });
 
 });
