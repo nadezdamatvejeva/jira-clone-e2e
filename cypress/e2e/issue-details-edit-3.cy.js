@@ -110,10 +110,10 @@ describe('Issue details editing', () => {
   });
 
   // task #3, workshop #17
-  it.only('Reporter test with regEx', () => {
-    //getIssueDetailsModal().within(() => {
+  it('Reporter test with regEx', () => {
+    getIssueDetailsModal().within(() => {
       cy.get('[data-testid="select:reporter"]').invoke('text').should('match', /^[A-Za-z ]*$/);
-    //});
+    });
   });
 
   //task #4, workshop #17

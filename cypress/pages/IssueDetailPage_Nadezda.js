@@ -17,12 +17,12 @@ class IssueDetailModal {
     }
 
     //Task #2
-    validateSavedData(array){
+    validateSavedData(array) {
         for (const [property, value] of array) {
             if (property === 'type' || property === 'assignees')
-              cy.get(this.commonSelector + property + "\"]").should('contain', value);
+                cy.get(this.commonSelector + property + "\"]").should('contain', value);
             else cy.get(this.commonSelector + property + "\"]").should('have.text', value);
-          }
+        }
     }
 
     getIssueDetailModal() {
@@ -38,9 +38,13 @@ class IssueDetailModal {
     }
 
     updateIssueTypeTo(type) {
-        this.clickOnIssueTypeField();
-        this.chooseIssueProperty(type);
-        this.ensureIssueTypeIsUpdatedTo(type);
+        cy.get(this.type).invoke('text').then((extractedText) => {
+            if (extractedText != type) {
+                this.clickOnIssueTypeField();
+                this.chooseIssueProperty(type);
+                this.ensureIssueTypeIsUpdatedTo(type);
+            }
+        })
     }
 
     updateIssueStatusTo(status) {
@@ -165,7 +169,7 @@ class IssueDetailModal {
             .click().should('not.exist');
     }
 
-    reporterFieldShouldAllowOnlyCharacter(){
+    reporterFieldShouldAllowOnlyCharacter() {
         cy.get(this.reporter).invoke('text').should('match', /^[A-Za-z ]*$/);
     }
 }

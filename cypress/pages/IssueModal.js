@@ -7,6 +7,7 @@ class IssueModal {
         this.issueType = '[data-testid="select:type"]';
         this.descriptionField = '.ql-editor';
         this.assignee = '[data-testid="select:userIds"]';
+        this.reporter = '[data-testid="select:reporterId"]';
         this.backlogList = '[data-testid="board-list:backlog"]';
         this.issuesList = '[data-testid="list-issue"]';
         this.newIssueButton = '[data-testid="icon:plus"]';
@@ -16,16 +17,20 @@ class IssueModal {
         return cy.get(this.issueModal);
     }
 
-    getNewIssueModal() {
+    openNewIssueModal() {
         cy.get(this.newIssueButton).click();
         cy.get(this.issueModal).should('be.visible');
     }
 
     selectIssueType(issueType) {
-        cy.get(this.issueType).click('bottomRight');
-        cy.get(`[data-testid="select-option:${issueType}"]`)
-            .trigger('mouseover')
-            .trigger('click');
+        cy.get(this.issueType).invoke('text').then((extractedText) => {
+            if (extractedText != issueType) {
+                cy.get(this.issueType).click('bottomRight');
+                cy.get(`[data-testid="select-option:${issueType}"]`)
+                    .trigger('mouseover')
+                    .trigger('click');
+            }
+        })
     }
 
     selectAssignee(assigneeName) {
@@ -33,9 +38,13 @@ class IssueModal {
         cy.get(`[data-testid="select-option:${assigneeName}"]`).click();
     }
 
+    selectReporter(reporterName) {
+        cy.get(this.reporter).click('bottomRight');
+        cy.get(`[data-testid="select-option:${reporterName}"]`).click();
+    }
+
     editTitle(title) {
         cy.get(this.title).type(title);
-        //this.ensureValueIsEdited(this.title, title);
     }
 
     editDescription(description) {
@@ -53,13 +62,16 @@ class IssueModal {
     }
 
     createIssueUsingCreateButton(issueDetails) {
-        this.getNewIssueModal();
+        this.openNewIssueModal();
         this.selectIssueType(issueDetails.type);
         this.editTitle(issueDetails.title);
         this.editDescription(issueDetails.description);
         this.selectAssignee(issueDetails.assignee);
-        cy.get(this.submitButton).click();
+        clickCreateIssueButton();
+    }
 
+    clickCreateIssueButton() {
+        cy.get(this.submitButton).click();
     }
 
     ensureIssueIsCreated(expectedAmountIssues, issueDetails) {
@@ -76,6 +88,7 @@ class IssueModal {
         });
     }
 
+
     ensureIssueTitleIsCorrect(issueTitle) {
         cy.get(this.backlogList).should('be.visible').within(() => {
             cy.get(this.issuesList)
@@ -84,6 +97,13 @@ class IssueModal {
                 .should('contain', issueTitle);
         });
     }
+
+    checkTitleFieldIsInErrorState(){
+        cy.get(this.title).scrollIntoView().should('have.css', 'border').and('contain', 'rgb(225, 60, 60)');
+    }
+
+
+    
 
 
 }

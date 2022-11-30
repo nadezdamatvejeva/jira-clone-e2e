@@ -38,7 +38,7 @@ describe('Issue create', () => {
       cy.get('[data-testid="avatar:Lord Gaben"]').should('be.visible');
       cy.get('[data-testid="icon:story"]').should('be.visible');
     });
-    let name = faker.name.findName();
+
 
   });
 
