@@ -39,11 +39,8 @@ describe('Issue details editing', () => {
       cy.contains('This is an issue of type: Task.').click();
     });
     cy.visit('https://jira.ivorreic.com/project/board');
-    //cy.url().should('eq', 'http://34.247.67.214:8080/project').then((url) => {
-    //  cy.visit(url + '/board');
     cy.contains('This is an issue of type: Task.').click();
   });
-  //});
 
 
   it('Should update type, status, assignees, reporter, priority successfully', () => {
@@ -113,10 +110,10 @@ describe('Issue details editing', () => {
   });
 
   // task #3, workshop #17
-  it('Reporter test with regEx', () => {
-    getIssueDetailsModal().within(() => {
+  it.only('Reporter test with regEx', () => {
+    //getIssueDetailsModal().within(() => {
       cy.get('[data-testid="select:reporter"]').invoke('text').should('match', /^[A-Za-z ]*$/);
-    });
+    //});
   });
 
   //task #4, workshop #17
