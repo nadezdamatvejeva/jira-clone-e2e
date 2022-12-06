@@ -2,14 +2,16 @@ class BoardPage {
     constructor() {
         this.issue = '[data-testid="list-issue"]';
         this.typePartialSelector = '[data-testid="icon:'
-        this.board = '#root'
+        this.board = '#root';
+        this.issueDetailPage = '[data-testid="modal:issue-details"]';
     }
 
-    getBoard() {
-        return cy.get(this.issueDetailsCard);
-    }
-    ensureCreatedIssueIsVisible(title){
+    ensureCreatedIssueIsVisible(title) {
         cy.contains(title).should('be.visible');
+    }
+
+    ensureCreatedIssueIsNotVisible(title) {
+        cy.contains(title).should('not.be.visible');
     }
 
     ensureIssueIsFirstOnTheBoard(title) {
@@ -22,6 +24,11 @@ class BoardPage {
         cy.get(this.issue).first().within(() => {
             cy.get(this.typePartialSelector + type.toLowerCase() + "\"]").should('be.visible');
         })
+    }
+
+    openIssueWithTitle(title) {
+        cy.contains(title).click();
+        cy.get(this.issueDetailPage).should('be.visible');
     }
 }
 

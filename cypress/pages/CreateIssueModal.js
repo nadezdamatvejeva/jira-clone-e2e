@@ -1,5 +1,5 @@
 
-class IssueModal {
+class CreateIssueModal {
     constructor() {
         this.submitButton = 'button[type="submit"]';
         this.issueModal = '[data-testid="modal:issue-create"]';
@@ -25,10 +25,10 @@ class IssueModal {
     selectIssueType(issueType) {
         cy.get(this.issueType).invoke('text').then((extractedText) => {
             if (extractedText != issueType) {
-                cy.get(this.issueType).click('bottomRight');
+                 cy.get(this.issueType).click('bottomRight');
                 cy.get(`[data-testid="select-option:${issueType}"]`)
-                    .trigger('mouseover')
-                    .trigger('click');
+                 .trigger('mouseover')
+                .trigger('click');
             }
         })
     }
@@ -67,11 +67,12 @@ class IssueModal {
         this.editTitle(issueDetails.title);
         this.editDescription(issueDetails.description);
         this.selectAssignee(issueDetails.assignee);
-        clickCreateIssueButton();
+        this.clickCreateIssueButton();
     }
 
     clickCreateIssueButton() {
         cy.get(this.submitButton).click();
+        cy.get(this.issueModal).should('not.be.visible');
     }
 
     ensureIssueIsCreated(expectedAmountIssues, issueDetails) {
@@ -98,14 +99,14 @@ class IssueModal {
         });
     }
 
-    checkTitleFieldIsInErrorState(){
+    checkTitleFieldIsInErrorState() {
         cy.get(this.title).scrollIntoView().should('have.css', 'border').and('contain', 'rgb(225, 60, 60)');
     }
 
 
-    
+
 
 
 }
 
-export default new IssueModal();
+export default new CreateIssueModal();

@@ -3,15 +3,15 @@
  * This is an example file and approach for OOP in Cypress
  */
 /// <reference types="Cypress" />
-import IssueModal from "../../pages/IssueModal";
+import CreateIssueModal from "../../pages/CreateIssueModal";
 import { faker } from '@faker-js/faker'
 
 describe('Issue create', () => {
   beforeEach(() => {
     cy.visit('/');
     cy.url().then((url) => {
-    cy.visit(url + '/settings?modal-issue-create=true');
-  });
+      //cy.visit(url + '/settings?modal-issue-create=true');
+    });
   });
 
   const issueDetails = {
@@ -24,8 +24,8 @@ describe('Issue create', () => {
   const EXPECTED_AMOUNT_OF_ISSUES = '5';
 
   it('Should create issue successfully', () => {
-    IssueModal.createIssueUsingCreateButton(issueDetails);
-    IssueModal.ensureIssueIsCreated(EXPECTED_AMOUNT_OF_ISSUES, issueDetails);
+    CreateIssueModal.createIssueUsingCreateButton(issueDetails);
+    CreateIssueModal.ensureIssueIsCreated(EXPECTED_AMOUNT_OF_ISSUES, issueDetails);
   });
 
 });

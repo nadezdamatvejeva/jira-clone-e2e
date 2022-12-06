@@ -13,7 +13,7 @@ class IssueDetailModal {
         this.deleteIcon = 'button [data-testid="icon:trash"]';
         this.confirmationModal = '[data-testid="modal:confirm"]';
         this.commonSelector = '[data-testid="select:';
-
+        this.mainPage ='#root';
     }
 
     //Task #2
@@ -32,9 +32,21 @@ class IssueDetailModal {
     deleteIssue() {
         cy.get(this.deleteIcon).click();
         cy.get(this.confirmationModal).should('be.visible');
-        cy.get(this.confirmationModal).contains('button', 'Delete issue')
+    }
+
+    confirmDeletion(isConfirmed){
+        if(isConfirmed) {
+            cy.get(this.confirmationModal).contains('button', 'Delete issue')
             .click();
-        cy.get(this.confirmationModal).should('not.exist');
+            cy.get(this.confirmationModal).should('not.exist');
+            cy.get(this.mainPage).should('be.visible');
+        }
+        else {
+            cy.get(this.confirmationModal).contains('button', 'Cancel')
+            .click();
+            cy.get(this.confirmationModal).should('not.exist');
+            cy.get(this.issueDetailsModal).should('be.visible');
+        }
     }
 
     updateIssueTypeTo(type) {
@@ -172,6 +184,7 @@ class IssueDetailModal {
     reporterFieldShouldAllowOnlyCharacter() {
         cy.get(this.reporter).invoke('text').should('match', /^[A-Za-z ]*$/);
     }
+
 }
 
 export default new IssueDetailModal();
