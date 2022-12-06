@@ -11,7 +11,7 @@ class BoardPage {
     }
 
     ensureCreatedIssueIsNotVisible(title) {
-        cy.contains(title).should('not.be.visible');
+        cy.contains(title).should('not.exist');
     }
 
     ensureIssueIsFirstOnTheBoard(title) {

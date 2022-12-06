@@ -44,6 +44,7 @@ class CreateIssueModal {
     }
 
     editTitle(title) {
+        cy.wait(1000);
         cy.get(this.title).type(title);
     }
 
@@ -72,7 +73,7 @@ class CreateIssueModal {
 
     clickCreateIssueButton() {
         cy.get(this.submitButton).click();
-        cy.get(this.issueModal).should('not.be.visible');
+        cy.get(this.issueModal).should('not.exist');
     }
 
     ensureIssueIsCreated(expectedAmountIssues, issueDetails) {

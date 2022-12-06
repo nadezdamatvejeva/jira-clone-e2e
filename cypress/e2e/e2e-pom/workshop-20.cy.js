@@ -57,27 +57,8 @@ describe('Issue create', () => {
     });
 
 
-    it('test', () => {
-        //open new issue creation modal
-        CreateIssueModal.openNewIssueModal();
-        //click on the type field to open the dropdown
-        cy.get('[data-testid="form-field:type"]').click();
-        //click on the x button in the type field to remove by default chosen Task type
-        cy.get('[data-testid="form-field:type"] [data-testid="icon:close"]').click();
-        //click outside of the dropdown on the Description label
-        cy.get('[data-testid="form-field:description"] label').click();
-
-        cy.get('[data-testid="form-field:reporterId"]').click();
-        cy.get('[data-testid="form-field:reporterId"] [data-testid="icon:close"]').click();
-        cy.get('[data-testid="form-field:description"] label').click();
-
-        cy.get('[data-testid="form-field:reporterId"]').click();
-        cy.get('[data-testid="form-field:reporterId"] [data-testid="icon:close"]').click();
-        cy.get('[data-testid="form-field:description"] label').click();
-        cy.get('[data-testid="form-field:userIds"]').click();
-        cy.get('[data-testid="form-field:description"] label').click();
-        cy.get('[data-testid="form-field:priority"]').click();
-        cy.get('[data-testid="form-field:description"] label').click();
+    it.only('test', () => {
+       cy.get('[data-testid="board-list:backlog"] p').first().click();
     });
 
 });

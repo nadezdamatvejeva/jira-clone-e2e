@@ -184,6 +184,10 @@ class IssueDetailModal {
     reporterFieldShouldAllowOnlyCharacter() {
         cy.get(this.reporter).invoke('text').should('match', /^[A-Za-z ]*$/);
     }
+    
+    closeIssueDetailPage(){
+
+    }
 
 }
 

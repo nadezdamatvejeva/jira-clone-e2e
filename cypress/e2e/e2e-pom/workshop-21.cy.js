@@ -4,26 +4,29 @@ import BoardPage from "../../pages/BoardPage";
 import Common from "../../pages/Common";
 import IssueDetailPage_Nadezda from "../../pages/IssueDetailPage_Nadezda";
 
-describe('Issue create', () => {
+describe('Deletion of create', () => {
     beforeEach(() => {
         cy.visit('/');
-        CreateIssueModal.createIssueUsingCreateButton(createdIssue);
+        CreateIssueModal.openNewIssueModal();
+        CreateIssueModal.editTitle("TO_DELETE");
+        CreateIssueModal.clickCreateIssueButton();
     });
 
-
-    const createdIssue = {
-        title: "TEST_TITLE",
-        type: "Bug",
-        description: "TEST_DESCRIPTION",
-        assignee: "Lord Gaben",
-      };
-
     it('Task 1: delete issue', () => {
-        CreateIssueModal.createIssueUsingCreateButton(createdIssue);
-        BoardPage.openIssueWithTitle(createdIssue.title);
+        
+        BoardPage.openIssueWithTitle("TO_DELETE");
         IssueDetailPage_Nadezda.deleteIssue();
         IssueDetailPage_Nadezda.confirmDeletion(true);
-        BoardPage.ensureCreatedIssueIsNotVisible(createdIssue.title);
+        BoardPage.ensureCreatedIssueIsNotVisible("TO_DELETE");
+    })
+
+    it.only('Task 2: cancel delete issue', () => {
+        
+        BoardPage.openIssueWithTitle("TO_DELETE");
+        IssueDetailPage_Nadezda.deleteIssue();
+        IssueDetailPage_Nadezda.confirmDeletion(false);
+        
+        BoardPage.ensureCreatedIssueIsVisible("TO_DELETE");
     })
 
 });
