@@ -186,7 +186,63 @@ class IssueDetailModal {
     }
     
     closeIssueDetailPage(){
+        cy.get('[data-testid="icon:close"]').click();
+        cy.get('[data-testid="modal:issue-details"]').should('not.exist');
+    }
 
+    editEstimation(number){
+        cy.contains("Original Estimate (hours)").next().get("div>input[placeholder='Number']").click();
+        cy.get("div>input[placeholder='Number']").clear().type(number);
+        cy.get("div>input[placeholder='Number']").should('have.value', number);
+    }
+
+    checkEstimation(number){
+        cy.get("div>input[placeholder='Number']").should('have.value', number);
+    }
+
+    removeEstimation(){
+        cy.contains("Original Estimate (hours)").next().get("div>input[placeholder='Number']").click();
+        cy.get("div>input[placeholder='Number']").clear();
+        cy.get("div>input[placeholder='Number']").should('have.value', '');
+        cy.contains("Original Estimate (hours)").click();
+    }
+
+    verifyEstimationIsVisibleInTimeTracking(number){
+        cy.get('[data-testid="icon:stopwatch"]').next().within(() => {
+            cy.get('div:nth-child(2)').get('div:nth-child(2)').should('contain', number);
+        });
+    }
+
+    verifyEstimationIsNotVisibleInTimeTracking(){
+        cy.get('[data-testid="icon:stopwatch"]').next().within(() => {
+            cy.contains("estimated").should('not.exist');
+        });
+    }
+
+    editTrackingTime(hours){
+        cy.get('[data-testid="icon:stopwatch"]').click();
+        cy.get('[data-testid="modal:tracking"]').should('be.visible');
+        cy.contains("Time spent (hours)").next().within(() => {
+            cy.get('[placeholder="Number"]').clear().type(hours);
+        });
+        cy.get('[data-testid="modal:tracking"]').contains("Done").click();
+        cy.get('[data-testid="modal:tracking"]').should('not.exist');
+    }
+
+    verifyTrackedTimeIsVisible(hours){
+        cy.get('[data-testid="icon:stopwatch"]').next().within(() => {
+            cy.get('div:nth-child(2)').get('div:nth-child(1)').should('contain', hours);
+        });
+    }
+
+   removeTrackingTime(){
+        cy.get('[data-testid="icon:stopwatch"]').click();
+        cy.get('[data-testid="modal:tracking"]').should('be.visible');
+        cy.contains("Time spent (hours)").next().within(() => {
+            cy.get('[placeholder="Number"]').clear();
+        });
+        cy.get('[data-testid="modal:tracking"]').contains("Done").click();
+        cy.get('[data-testid="modal:tracking"]').should('not.exist');
     }
 
 }

@@ -17,7 +17,7 @@ describe('Deletion of create', () => {
         BoardPage.openIssueWithTitle("TO_DELETE");
         IssueDetailPage_Nadezda.deleteIssue();
         IssueDetailPage_Nadezda.confirmDeletion(true);
-        BoardPage.ensureCreatedIssueIsNotVisible("TO_DELETE");
+        BoardPage.ensureCreatedIssueIsNotVisible("TO_DELETEödktjhkletnhnkldn");
     })
 
     it.only('Task 2: cancel delete issue', () => {
@@ -25,7 +25,7 @@ describe('Deletion of create', () => {
         BoardPage.openIssueWithTitle("TO_DELETE");
         IssueDetailPage_Nadezda.deleteIssue();
         IssueDetailPage_Nadezda.confirmDeletion(false);
-        
+
         BoardPage.ensureCreatedIssueIsVisible("TO_DELETE");
     })
 
